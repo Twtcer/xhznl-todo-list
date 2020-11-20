@@ -1,8 +1,8 @@
 {
-  "name": "xhznl-todo-list",
+  "name": "today-todo",
   "version": "0.1.7",
   "private": true,
-  "author": "xhznl",
+  "author": "landwind",
   "description": "a todo list application",
   "scripts": {
     "serve": "vue-cli-service serve",

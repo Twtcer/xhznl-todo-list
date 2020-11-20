@@ -16,7 +16,7 @@
           @dblclick.stop="done($event, index)"
           @click.stop="editing(index)"
         >
-          <p v-if="index !== editIndex">{{ index + 1 }}.{{ todo.content }} {{dateTimeFormate(todo.todo_datetime)}}</p>
+          <p v-if="index !== editIndex">{{ index + 1 }}.{{ todo.content }}</p>
           <div class="edit" v-else>
             <input
               v-model="todo.content"
@@ -31,7 +31,7 @@
           </div>
         </div>
       </transition-group>
-    </draggable>
+    </draggable>   
   </div>
 </template>
 <script>
@@ -39,10 +39,10 @@ import draggable from "vuedraggable";
 import CursorSpecialEffects from "@/utils/fireworks";
 import { ipcRenderer } from "electron";
 import DB from "@/utils/db";
-import { getNowDate, getNowDateTime, dateTimeFormate} from "@/utils/common";
+import { getNowDate, getNowDateTime } from "@/utils/common";
 
 export default {
-  name: "Todo",
+  name: "Stock",
   components: {
     draggable,
   },
@@ -56,7 +56,6 @@ export default {
     };
   },
   methods: {
-    dateTimeFormate,
     getTodoList() {
       const list = DB.get("todoList");
       if (list.length === 0) {
@@ -209,7 +208,8 @@ export default {
         overflow: hidden;
         cursor: pointer;
         user-select: none;
-        line-height: 28px;
+        line-height: 28px; 
+        color: rgba($color: #63e21a8f, $alpha: 0.9); 
       }
       .edit {
         display: flex;
@@ -234,7 +234,7 @@ export default {
     }
     .item:hover {
       p {
-        color: rgba($color: #00ffff, $alpha: 0.6);
+        color: rgba($color: #ffffff, $alpha: 0.9);
       }
     }
   }
@@ -249,4 +249,5 @@ export default {
 .ghost {
   opacity: 0.5;
 }
+
 </style>

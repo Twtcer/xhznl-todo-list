@@ -31,10 +31,10 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 320,
-    height: 290,
-    minWidth: 320,
-    minHeight: 290,
+    width: 480,
+    height: 320,
+    minWidth: 480,
+    minHeight: 320,
     type: "toolbar",
     frame: false,
     title: pkg.name,
@@ -42,7 +42,7 @@ async function createWindow() {
     minimizable: false,
     maximizable: false,
     skipTaskbar: true,
-    //closable: false,
+    closable: false,
     //show: false,
     transparent: true,
     alwaysOnTop: true,

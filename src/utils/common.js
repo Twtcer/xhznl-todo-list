@@ -26,3 +26,11 @@ export function getDateStr(date) {
     return d.format("YYYY年MM月DD日");
   }
 }
+
+export function dateFormate(date){
+  return dayjs(date).format("YYYY-MM-DD");
+}
+
+export function dateTimeFormate(date){
+  return dayjs(date).format("MM/DD HH:mm");
+}

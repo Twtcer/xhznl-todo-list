@@ -2,13 +2,13 @@
   <div id="app" :class="{ unfocused: ignoreMouse }">
     <div class="mask"></div>
     <div class="drag-nav">
-      <b>{{ appName }}</b>
-      <i>Powered by 小黑</i>
+      <b>{{ appName }}</b> 
     </div>
     <div class="nav">
-      <div class="link">
-        <router-link draggable="false" to="/">Todo</router-link> |
-        <router-link draggable="false" to="/done">Done</router-link>
+      <div class="link">  
+        <router-link draggable="true" to="/">Stock</router-link> |
+        <router-link draggable="false" to="/todo">Todo</router-link> |
+        <router-link draggable="false" to="/done">Done</router-link> 
       </div>
       <div class="tools">
         <transition-group name="fade" mode="out-in">
@@ -31,6 +31,9 @@
         <router-view />
         <!-- </keep-alive> -->
       </transition>
+    </div>
+    <div class="state-panel">
+
     </div>
   </div>
 </template>
@@ -67,7 +70,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: rgba($color: #000000, $alpha: 0.6);
+  background-color: rgba($color: #31303065, $alpha: 0.6);
   border-radius: 5px;
   .mask {
     display: none;
@@ -88,7 +91,7 @@ export default {
     font-size: 12px;
     b,
     i {
-      color: rgba($color: #ffffff, $alpha: 0.3);
+      color: rgba($color: #ffffff, $alpha: 0.9);
     }
   }
   .nav {
@@ -140,4 +143,10 @@ export default {
     z-index: 1000;
   }
 }
+
+.state-panel{
+ height: 40px;
+ background-color: rgba($color: #c3cec3, $alpha: 0.8);
+}
+
 </style>

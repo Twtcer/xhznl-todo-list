@@ -1,9 +1,9 @@
 <template>
   <div class="root">
     <div class="list" v-for="(value, key) in doneGroupList" :key="key">
-      <div class="group">{{ getDateStr(key) }}</div>
+      <!-- <div class="group">{{ getDateStr(key) }}</div> -->
       <div class="item" v-for="(done, index) in value" :key="done.id">
-        <p>{{ index + 1 }}.{{ done.content }}</p>
+        <p>{{ index + 1 }}.{{ done.content }} {{dateTimeFormate(done.done_datetime)}}</p>
       </div>
     </div>
   </div>
@@ -11,7 +11,7 @@
 <script>
 import { ipcRenderer } from "electron";
 import DB from "@/utils/db";
-import { getDateStr, getNowDate, getNowDateTime } from "@/utils/common";
+import { getDateStr, getNowDate, getNowDateTime,dateTimeFormate } from "@/utils/common";
 
 export default {
   name: "Done",
@@ -21,7 +21,8 @@ export default {
     };
   },
   methods: {
-    getDateStr,
+    getDateStr, 
+    dateTimeFormate,
     getDoneList() {
       const list = DB.groupby("doneList", "done_date");
       if (Object.keys(list).length === 0) {
@@ -62,10 +63,10 @@ export default {
       position: sticky;
       top: 0;
       z-index: -999;
-      height: 224px;
+      height: 80px;
       line-height: 180px;
       box-sizing: border-box;
-      color: rgba($color: #cccccc, $alpha: 0.8);
+      color: rgba($color: #f5f4f4, $alpha: 0.8);
       font-size: 35px;
       text-align: center;
       user-select: none;
@@ -83,7 +84,7 @@ export default {
     }
     .item:hover {
       p {
-        color: rgba($color: #ffffff, $alpha: 0.6);
+        color: rgba($color: #20e91969, $alpha: 0.6);
       }
     }
   }

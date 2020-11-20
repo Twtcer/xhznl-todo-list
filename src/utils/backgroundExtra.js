@@ -19,7 +19,8 @@ import { getNowDateTimeForFlieName } from "@/utils/common";
 let tray;
 
 export function getDataPath() {
-  return app.getPath("userData");
+  // return app.getPath("userData");
+  return app.getAppPath();
 }
 
 ipcMain.handle("getDataPath", (event) => {
@@ -28,6 +29,7 @@ ipcMain.handle("getDataPath", (event) => {
 
 export function initExtra() {
   const storePath = getDataPath();
+  console.log('DB path: '+storePath); 
   DB.initDB(storePath);
 
   const firstRun = DB.get("settings.firstRun");
@@ -50,31 +52,31 @@ export function createTray(setPosition) {
         setOpenAtLogin(!openAtLogin);
       },
     },
-    {
-      label: "项目地址",
-      click: () => {
-        shell.openExternal("https://github.com/xiajingren/xhznl-todo-list");
-      },
-    },
-    {
-      label: "问题反馈",
-      click: () => {
-        shell.openExternal(
-          "https://github.com/xiajingren/xhznl-todo-list/issues"
-        );
-      },
-    },
-    {
-      label: "关于",
-      role: "abort",
-      click() {
-        dialog.showMessageBox({
-          title: pkg.name,
-          message: pkg.description,
-          detail: `Version: ${pkg.version}\nAuthor: ${pkg.author}\nGithub: https://github.com/xiajingren/xhznl-todo-list`,
-        });
-      },
-    },
+    // {
+    //   label: "项目地址",
+    //   click: () => {
+    //     shell.openExternal("https://github.com/xiajingren/xhznl-todo-list");
+    //   },
+    // },
+    // {
+    //   label: "问题反馈",
+    //   click: () => {
+    //     shell.openExternal(
+    //       "https://github.com/xiajingren/xhznl-todo-list/issues"
+    //     );
+    //   },
+    // },
+    // {
+    //   label: "关于",
+    //   role: "abort",
+    //   click() {
+    //     dialog.showMessageBox({
+    //       title: pkg.name,
+    //       message: pkg.description,
+    //       detail: `Version: ${pkg.version}\nAuthor: ${pkg.author}\nGithub: https://github.com/xiajingren/xhznl-todo-list`,
+    //     });
+    //   },
+    // },
     {
       label: "退出",
       role: "quit",
