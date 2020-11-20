@@ -2,7 +2,7 @@
   <div class="root" @click="add">
     <draggable
       class="list"
-      v-model="todoList"
+      v-model="stockList"
       v-bind="dragOptions"
       @start="drag = true"
       @end="drag = false"
@@ -11,15 +11,18 @@
       <transition-group type="transition" :name="!drag ? 'flip-list' : null">
         <div
           class="item"
-          v-for="(todo, index) in todoList"
-          :key="'todo' + index"
+          v-for="(stock, index) in stockList"
+          :key="'stock' + index"
           @dblclick.stop="done($event, index)"
           @click.stop="editing(index)"
         >
-          <p v-if="index !== editIndex">{{ index + 1 }}.{{ todo.content }}</p>
+          <p v-if="index !== editIndex">
+            {{ stock.stockId }}.{{ stock.stockName }} 
+            <span class="basePrice">{{stock.basePrice}}</span> / <span v-bind:class="{'currentPrice-up':stock.basePrice < stock.currentPrice,'currentPrice-down':stock.basePrice >= stock.currentPrice}">{{stock.currentPrice}}</span>
+            </p>
           <div class="edit" v-else>
             <input
-              v-model="todo.content"
+              v-model="stock.stockId"
               v-focus
               @click.stop="return false;"
               @keyup.27="cancel(index)"
@@ -48,7 +51,7 @@ export default {
   },
   data() {
     return {
-      todoList: null,
+      stockList: [],
       drag: false,
       editIndex: -1,
       tempItem: null,
@@ -56,39 +59,21 @@ export default {
     };
   },
   methods: {
-    getTodoList() {
-      const list = DB.get("todoList");
-      if (list.length === 0) {
-        this.todoList = [
+    getStockList() {  
+      const list = DB.get("stockList");  
+      if (list===undefined) {   
+        this.stockList = [ 
           {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“单击”下方空处，创建一个Todo",
+            stockId:"000001",
+            stockName:"平安银行",
+            basePrice:17.5,
+            currentPrice:18.5,
+            createTime: getNowDateTime()
           },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“双击”Todo，表示已完成",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“单击”Todo，可进行更改或删除",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“长按”Todo，可进行拖动排序",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "【重要】点一个star",
-          },
-        ];
+        ];  
         return;
       }
-      this.todoList = list;
+      this.stockList = list;
     },
     add() {
       if (this.editIndex !== -1) {
@@ -96,15 +81,18 @@ export default {
         return;
       }
 
-      this.todoList.push({
-        todo_date: getNowDate(),
-        todo_datetime: getNowDateTime(),
-        content: "",
+      this.stockList.push({
+            stockId:"000001",
+            stockName:"",
+            basePrice:0,
+            currentPrice:0,
+            createTime: getNowDateTime()
       });
-      const index = this.todoList.length - 1;
-      this.tempItem = Object.assign({}, this.todoList[index]);
+      const index = this.stockList.length - 1;
+      this.tempItem = Object.assign({}, this.stockList[index]);
       this.editIndex = index;
       //this.editing(index);
+      //ToDo:爬取股票价格
     },
     editing(index) {
       setTimeout(() => {
@@ -116,30 +104,30 @@ export default {
           this.edited();
         }
 
-        this.tempItem = Object.assign({}, this.todoList[index]);
+        this.tempItem = Object.assign({}, this.stockList[index]);
 
         this.editIndex = index;
       }, 220);
     },
     edited() {
-      this.todoList = this.todoList.filter((p) => {
-        return p.content;
+      this.stockList = this.stockList.filter((p) => {
+        return p.stockId;
       });
       this.editIndex = -1;
 
-      DB.set("todoList", this.todoList);
+      DB.set("stockList", this.stockList);
     },
     cancel(index) {
-      this.$set(this.todoList, index, this.tempItem);
+      this.$set(this.stockList, index, this.tempItem);
       this.edited();
     },
     clear(index) {
-      if (!this.todoList[index].content) {
+      if (!this.stockList[index].stockId) {
         this.edited();
         return;
       }
 
-      this.todoList[index].content = "";
+      this.stockList[index].stockId = "";
     },
     done(event, index) {
       if (this.editIndex !== -1) {
@@ -157,12 +145,14 @@ export default {
         "doneList",
         Object.assign(
           { done_date: getNowDate(), done_datetime: getNowDateTime() },
-          this.todoList[index]
+          this.stockList[index]
         )
       );
-      this.todoList.splice(index, 1);
-      DB.set("todoList", this.todoList);
-    },
+      this.stockList.splice(index, 1);
+      DB.set("stockList", this.stockList);
+    }, 
+    // queryStock(stockId){
+    // } 
   },
   computed: {
     dragOptions() {
@@ -172,13 +162,13 @@ export default {
         disabled: false,
         ghostClass: "ghost",
       };
-    },
+    }, 
   },
-  created() {
+  created() { 
+    console.log('stock page call created');
     ipcRenderer.invoke("getDataPath").then((storePath) => {
-      DB.initDB(storePath);
-
-      this.getTodoList();
+      DB.initDB(storePath); 
+      this.getStockList();
     });
   },
   directives: {
@@ -210,6 +200,19 @@ export default {
         user-select: none;
         line-height: 28px; 
         color: rgba($color: #63e21a8f, $alpha: 0.9); 
+
+        .basePrice{
+            color: rgba($color: #e7f707fa, $alpha: 0.9); 
+        }
+
+        .currentPrice-up{
+            color: rgba($color: #f80e0ebe, $alpha: 0.9); 
+        } 
+        
+        .currentPrice-down{
+            color: rgba($color: #63e21a8f, $alpha: 0.9); 
+        }
+
       }
       .edit {
         display: flex;

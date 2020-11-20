@@ -61,33 +61,33 @@ export default {
       const list = DB.get("todoList");
       if (list.length === 0) {
         this.todoList = [
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“单击”下方空处，创建一个Todo",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“双击”Todo，表示已完成",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“单击”Todo，可进行更改或删除",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "“长按”Todo，可进行拖动排序",
-          },
-          {
-            todo_date: getNowDate(),
-            todo_datetime: getNowDateTime(),
-            content: "【重要】点一个star",
-          },
-        ];
-        return;
+          // {
+          //   todo_date: getNowDate(),
+          //   todo_datetime: getNowDateTime(),
+          //   content: "“单击”下方空处，创建一个Todo",
+          // },
+          // {
+          //   todo_date: getNowDate(),
+          //   todo_datetime: getNowDateTime(),
+          //   content: "“双击”Todo，表示已完成",
+          // },
+          // {
+          //   todo_date: getNowDate(),
+          //   todo_datetime: getNowDateTime(),
+          //   content: "“单击”Todo，可进行更改或删除",
+          // },
+          // {
+          //   todo_date: getNowDate(),
+          //   todo_datetime: getNowDateTime(),
+          //   content: "“长按”Todo，可进行拖动排序",
+          // },
+          // {
+          //   todo_date: getNowDate(),
+          //   todo_datetime: getNowDateTime(),
+          //   content: "【重要】点一个star",
+          // },
+        ]; 
+                return;
       }
       this.todoList = list;
     },
@@ -175,7 +175,8 @@ export default {
       };
     },
   },
-  created() {
+  created() { 
+    console.log('call created');
     ipcRenderer.invoke("getDataPath").then((storePath) => {
       DB.initDB(storePath);
 

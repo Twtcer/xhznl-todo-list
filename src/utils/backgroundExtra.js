@@ -6,6 +6,7 @@ import {
   shell,
   dialog,
   Notification,
+  globalShortcut
 } from "electron";
 import DB from "./db";
 import path from "path";
@@ -16,7 +17,7 @@ import ExcelJS from "exceljs";
 
 import { getNowDateTimeForFlieName } from "@/utils/common";
 
-let tray;
+let tray; 
 
 export function getDataPath() {
   // return app.getPath("userData");
@@ -37,6 +38,18 @@ export function initExtra() {
     setOpenAtLogin(true);
     DB.set("settings.firstRun", false);
   }
+}
+
+export function registerHotKey(mianWin) {
+  if (!globalShortcut.isRegistered('CommandOrControl+G')) {
+    globalShortcut.register('CommandOrControl+G', () => {
+      mianWin.webContents.openDevTools();
+    });
+  } 
+}
+
+export function unregisterAllHotKey() {
+  globalShortcut.unregisterAll();
 }
 
 export function createTray(setPosition) {
