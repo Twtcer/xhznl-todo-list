@@ -1,0 +1,58 @@
+{
+  "todoList": [],
+  "doneList": [
+    {
+      "done_date": "2020/11/21",
+      "done_datetime": "2020/11/21 17:22:48",
+      "todo_date": "2020/11/21",
+      "todo_datetime": "2020/11/21 10:27:12",
+      "content": "今日完成便签-股票的刷新",
+      "id": "8af391cc-c54c-4e2f-87e4-4983d2590630"
+    }
+  ],
+  "settings": {
+    "firstRun": false
+  },
+  "stockList": [
+    {
+      "stockId": "000001",
+      "stockName": "平安银行",
+      "todayPrice": "18.830",
+      "yesterdayPrice": "18.850",
+      "currentPrice": "18.860",
+      "todayMaxPrice": "18.990",
+      "todayMinPrice": "18.520",
+      "createdTime": "2020-11-20 15:00:03"
+    },
+    {
+      "stockId": "000625",
+      "stockName": "长安汽车",
+      "todayPrice": "19.900",
+      "yesterdayPrice": "20.250",
+      "currentPrice": "20.580",
+      "todayMaxPrice": "20.890",
+      "todayMinPrice": "19.260",
+      "createdTime": "2020-11-20 15:00:03"
+    },
+    {
+      "stockId": "002594",
+      "stockName": "比亚迪",
+      "todayPrice": "164.650",
+      "yesterdayPrice": "161.620",
+      "currentPrice": "176.060",
+      "todayMaxPrice": "177.240",
+      "todayMinPrice": "163.220",
+      "createdTime": "2020-11-20 15:00:03"
+    },
+    {
+      "stockId": "601633",
+      "stockName": "长城汽车",
+      "todayPrice": "25.150",
+      "yesterdayPrice": "24.930",
+      "currentPrice": "26.600",
+      "todayMaxPrice": "26.990",
+      "todayMinPrice": "24.950",
+      "createdTime": "2020-11-20 15:00:02"
+    }
+  ]
+}

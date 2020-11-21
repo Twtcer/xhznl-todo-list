@@ -283,7 +283,7 @@ export default {
            color: rgba($color: #00ffdd, $alpha: 0.9); 
         }
         .todayPrice{
-            color: rgba($color: #0000ff, $alpha: 0.8); 
+            color: rgba($color: #2020f3bd, $alpha: 0.8); 
         }
 
         .todayMinPrice{
@@ -291,11 +291,11 @@ export default {
         }
 
          .todayMaxPrice{
-            color: rgba($color: #ee1895, $alpha: 0.8); 
+            color: rgba($color: #fa53b4, $alpha: 0.8); 
         }
 
         .currentPrice-up{
-            color: rgba($color: #f80e0ee5, $alpha: 0.9); 
+            color: rgba($color: #f80e0ee5, $alpha: 0.8); 
         } 
         
         .currentPrice-down{
