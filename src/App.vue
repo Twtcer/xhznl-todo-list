@@ -22,6 +22,9 @@
             @mouseleave="setIgnoreMouseEvents(ignoreMouse)"
             @click="ignoreMouse = !ignoreMouse"
           ></i>
+
+          <i class="iconfont icon-add" key="add"></i>
+            
         </transition-group>
       </div>
     </div>
@@ -32,8 +35,10 @@
         <!-- </keep-alive> -->
       </transition>
     </div>
-    <div class="state-panel">
-
+    <div class="state-panel"> 
+        <div class="item sh "> 上证: <span>3309.22</span> </div> 
+        <div class="item sz "> 深证:<span>  12022 </span> </div>
+         <div class="item hk "> 港股:<span>  19022 </span> </div>
     </div>
   </div>
 </template>
@@ -147,6 +152,25 @@ export default {
 .state-panel{
  height: 40px;
  background-color: rgba($color: #c3cec3, $alpha: 0.8);
+ display: flex;
+ flex-flow: row wrap;
+ align-content: flex-start;
+ 
+ .item{
+   line-height: 40px;
+   font-size: 20px;  
+     flex: 0 0 33%; 
+ }
+
+ .sh{
+   color: rgba($color: #ff0000, $alpha: 0.4);
+ }
+ .sz{
+   color: rgba($color: #00ff00, $alpha: 0.4);
+ }
+ .hk{
+   color: rgba($color: #0000ff, $alpha: 0.4);
+ }
 }
 
 </style>

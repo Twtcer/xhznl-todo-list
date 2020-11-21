@@ -31,9 +31,9 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 480,
+    width: 600,
     height: 320,
-    minWidth: 480,
+    minWidth: 600,
     minHeight: 320,
     type: "toolbar",
     frame: false,
@@ -50,7 +50,9 @@ async function createWindow() {
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION, 
+      devTools:true,//是否开启DevTools
+      webSecurity:false//是否禁用同源策略，上线需要删除
     },
   });
 
@@ -59,7 +61,7 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    // if (!process.env.IS_TEST) win.webContents.openDevTools();
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
@@ -78,6 +80,9 @@ async function createWindow() {
 
 //闪烁问题
 app.commandLine.appendSwitch("wm-window-animations-disabled");
+
+//跨域
+app.commandLine.appendSwitch("disable-features","OutOfBlinkCors");
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {

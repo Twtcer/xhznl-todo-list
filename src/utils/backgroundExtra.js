@@ -41,8 +41,8 @@ export function initExtra() {
 }
 
 export function registerHotKey(mianWin) {
-  if (!globalShortcut.isRegistered('CommandOrControl+G')) {
-    globalShortcut.register('CommandOrControl+G', () => {
+  if (!globalShortcut.isRegistered('CommandOrControl+G+H')) {
+    globalShortcut.register('CommandOrControl+G+H', () => { 
       mianWin.webContents.openDevTools();
     });
   } 

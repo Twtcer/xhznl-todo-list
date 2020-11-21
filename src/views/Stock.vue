@@ -17,14 +17,26 @@
           @click.stop="editing(index)"
         >
           <p v-if="index !== editIndex">
-            {{ stock.stockId }}.{{ stock.stockName }} 
-            <span class="basePrice">{{stock.basePrice}}</span> / <span v-bind:class="{'currentPrice-up':stock.basePrice < stock.currentPrice,'currentPrice-down':stock.basePrice >= stock.currentPrice}">{{stock.currentPrice}}</span>
+          <span class="stockId">  {{ stock.stockId }} </span>
+           <span class="stockName">  {{ stock.stockName }} </span>
+             开盘
+            <span class="todayPrice">{{stock.todayPrice}}</span> 
+            /
+              实时
+             <span v-bind:class="{'currentPrice-up':stock.todayPrice < stock.currentPrice,'currentPrice-down':stock.todayPrice >= stock.currentPrice}">{{stock.currentPrice}}</span>
+             /
+             最低
+            <span class="todayMinPrice">{{stock.todayMinPrice}}</span> 
+               /
+               最高
+            <span class="todayMaxPrice">{{stock.todayMaxPrice}}</span> 
+
             </p>
           <div class="edit" v-else>
             <input
               v-model="stock.stockId"
               v-focus
-              @click.stop="return false;"
+              @click.stop="return false"
               @keyup.27="cancel(index)"
               @keyup.13="edited"
               spellcheck="false"
@@ -43,6 +55,7 @@ import CursorSpecialEffects from "@/utils/fireworks";
 import { ipcRenderer } from "electron";
 import DB from "@/utils/db";
 import { getNowDate, getNowDateTime } from "@/utils/common";
+import axios from "axios";  
 
 export default {
   name: "Stock",
@@ -56,19 +69,70 @@ export default {
       editIndex: -1,
       tempItem: null,
       dblclick: false,
+      setIntervalTime:10000,
+      intervalId:null
     };
   },
   methods: {
+    getStockPrefix(stock){ 
+      if(stock===null)
+        return null;
+      let prefix =  "0123".indexOf(stock.stockId.substring(0,1))>=0
+       ?"sz":"sh";
+       return  prefix+stock.stockId; 
+    },  
+    queryStockInfos()
+    {  
+      let stocks = [];
+      let stockIds =  this.stockList.filter(a=> a.stockId).map(a=> this.getStockPrefix(a));
+       axios.get(`http://hq.sinajs.cn/list=${stockIds.join(',')}`)
+      .then(response =>{ 
+        try
+        {
+          let stocks =  response.data.split(';');
+          let stockInfos = stocks.map((stock,index)=>{
+            let data = stock.split('=')[1]; 
+            if(data)
+            {  
+              let params = data.substring(1,data.length-1).split(',');
+              return {
+                          stockId:stockIds[index].substring(2),
+                          stockName:params[0],
+                          todayPrice:params[1],
+                          yesterdayPrice:params[2],
+                          currentPrice:params[3],
+                          todayMaxPrice:params[4],
+                          todayMinPrice:params[5],
+                          createdTime:params[30]+' '+params[31],
+                      };
+            }  
+          }); 
+          stocks = stockInfos.filter(a=>a);  
+          this.stockList = stocks;
+          DB.set("stockList", stocks);
+        }
+        catch(err){
+            console.log(err);
+        }  
+      })
+      .catch(e=>{
+        console.error("query stock info error : "+e); 
+      });
+      return stocks;
+    },  
     getStockList() {  
       const list = DB.get("stockList");  
-      if (list===undefined) {   
+      if (list===undefined || list.length<=0) {   
         this.stockList = [ 
           {
             stockId:"000001",
-            stockName:"平安银行",
-            basePrice:17.5,
-            currentPrice:18.5,
-            createTime: getNowDateTime()
+            stockName:"平安银行", 
+            todayPrice:0,
+            yesterdayPrice:0,
+            currentPrice:0,
+            todayMaxPrice:0,
+            todayMinPrice:0,
+            createdTime:getNowDateTime()
           },
         ];  
         return;
@@ -76,48 +140,52 @@ export default {
       this.stockList = list;
     },
     add() {
+      
+      console.log('add');
       if (this.editIndex !== -1) {
         this.edited();
         return;
       }
 
       this.stockList.push({
-            stockId:"000001",
-            stockName:"",
-            basePrice:0,
+            stockId:"",
+            stockName:"",  
+            todayPrice:0,
+            yesterdayPrice:0,
             currentPrice:0,
-            createTime: getNowDateTime()
+            todayMaxPrice:0,
+            todayMinPrice:0,
+            createdTime:getNowDateTime()
       });
+       
       const index = this.stockList.length - 1;
-      this.tempItem = Object.assign({}, this.stockList[index]);
-      this.editIndex = index;
-      //this.editing(index);
-      //ToDo:爬取股票价格
+      this.tempItem = Object.assign({}, this.stockList[index]); 
+      this.editing(index); 
     },
-    editing(index) {
-      setTimeout(() => {
-        if (this.dblclick) {
-          return;
-        }
+    editing(index) {  
+      this.editIndex = index;  
+      // setTimeout(() => {
+      //   if (this.dblclick) {
+      //     return;
+      //   }
 
-        if (this.editIndex !== -1) {
-          this.edited();
-        }
-
-        this.tempItem = Object.assign({}, this.stockList[index]);
-
-        this.editIndex = index;
-      }, 220);
+      //   if (this.editIndex !== -1) {
+      //     this.edited();
+      //   } 
+         
+      //   this.tempItem = Object.assign({}, this.stockList[index]);    
+      // }, 220);
     },
-    edited() {
+    edited() { 
+      console.log('edited');
       this.stockList = this.stockList.filter((p) => {
         return p.stockId;
       });
-      this.editIndex = -1;
-
+      this.editIndex = -1; 
       DB.set("stockList", this.stockList);
     },
-    cancel(index) {
+    cancel(index) { 
+      console.log('cancel');
       this.$set(this.stockList, index, this.tempItem);
       this.edited();
     },
@@ -130,6 +198,8 @@ export default {
       this.stockList[index].stockId = "";
     },
     done(event, index) {
+      debugger
+      console.log('done');
       if (this.editIndex !== -1) {
         return;
       }
@@ -142,7 +212,7 @@ export default {
       CursorSpecialEffects.handleMouseDown(event);
 
       DB.insert(
-        "doneList",
+        "stockList",
         Object.assign(
           { done_date: getNowDate(), done_datetime: getNowDateTime() },
           this.stockList[index]
@@ -150,9 +220,7 @@ export default {
       );
       this.stockList.splice(index, 1);
       DB.set("stockList", this.stockList);
-    }, 
-    // queryStock(stockId){
-    // } 
+    }
   },
   computed: {
     dragOptions() {
@@ -164,11 +232,18 @@ export default {
       };
     }, 
   },
-  created() { 
-    console.log('stock page call created');
+  created() {  
     ipcRenderer.invoke("getDataPath").then((storePath) => {
       DB.initDB(storePath); 
-      this.getStockList();
+      this.getStockList();  
+      console.log('clear intervalId: '+this.intervalId);
+      clearInterval(this.intervalId);
+      //默认定时刷新
+      this.intervalId =  setInterval(()=>{
+       this.queryStockInfos(); 
+       console.log('fresh success');
+      },this.setIntervalTime); 
+      console.log('new intervalId: '+this.intervalId);
     });
   },
   directives: {
@@ -199,14 +274,28 @@ export default {
         cursor: pointer;
         user-select: none;
         line-height: 28px; 
-        color: rgba($color: #63e21a8f, $alpha: 0.9); 
+        // color: rgba($color: #63e21a8f, $alpha: 0.9); 
 
-        .basePrice{
-            color: rgba($color: #e7f707fa, $alpha: 0.9); 
+        .stockId{
+          color: rgba($color: #00ff00, $alpha: 0.9);
+        }
+        .stockName{
+           color: rgba($color: #00ffdd, $alpha: 0.9); 
+        }
+        .todayPrice{
+            color: rgba($color: #0000ff, $alpha: 0.8); 
+        }
+
+        .todayMinPrice{
+            color: rgba($color: #35f10f, $alpha: 0.8); 
+        }
+
+         .todayMaxPrice{
+            color: rgba($color: #ee1895, $alpha: 0.8); 
         }
 
         .currentPrice-up{
-            color: rgba($color: #f80e0ebe, $alpha: 0.9); 
+            color: rgba($color: #f80e0ee5, $alpha: 0.9); 
         } 
         
         .currentPrice-down{
