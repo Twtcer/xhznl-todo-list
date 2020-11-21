@@ -21,7 +21,7 @@ let tray;
 
 export function getDataPath() {
   // return app.getPath("userData");
-  return app.getAppPath();
+  return process.cwd();
 }
 
 ipcMain.handle("getDataPath", (event) => {
