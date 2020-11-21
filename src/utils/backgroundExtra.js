@@ -93,6 +93,9 @@ export function createTray(setPosition) {
     {
       label: "退出",
       role: "quit",
+      click() {
+         app.exit();
+      },
     },
   ]);
   tray.setContextMenu(contextMenu);

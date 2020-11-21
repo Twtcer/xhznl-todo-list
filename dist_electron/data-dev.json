@@ -15,16 +15,6 @@
   },
   "stockList": [
     {
-      "stockId": "000001",
-      "stockName": "平安银行",
-      "todayPrice": "18.830",
-      "yesterdayPrice": "18.850",
-      "currentPrice": "18.860",
-      "todayMaxPrice": "18.990",
-      "todayMinPrice": "18.520",
-      "createdTime": "2020-11-20 15:00:03"
-    },
-    {
       "stockId": "000625",
       "stockName": "长安汽车",
       "todayPrice": "19.900",

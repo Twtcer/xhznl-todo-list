@@ -326,7 +326,7 @@ export default {
     }
     .item:hover {
       p {
-        color: rgba($color: #ffffff, $alpha: 0.9);
+        color: rgba($color: #d5f811, $alpha: 0.9);
       }
     }
   }
