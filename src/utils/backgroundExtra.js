@@ -94,7 +94,7 @@ export function createTray(setPosition) {
       label: "退出",
       role: "quit",
       click() {
-         app.exit();
+         app.quit();
       },
     },
   ]);
