@@ -53,16 +53,6 @@
       "todayMaxPrice": "9.590",
       "todayMinPrice": "9.020",
       "createdTime": "2020-11-20 15:00:02"
-    },
-    {
-      "stockId": "600519",
-      "stockName": "贵州茅台",
-      "todayPrice": "1720.000",
-      "yesterdayPrice": "1720.190",
-      "currentPrice": "1719.960",
-      "todayMaxPrice": "1736.000",
-      "todayMinPrice": "1712.650",
-      "createdTime": "2020-11-20 15:00:02"
     }
   ]
 }

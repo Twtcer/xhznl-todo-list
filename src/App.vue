@@ -23,7 +23,7 @@
             @click="ignoreMouse = !ignoreMouse"
           ></i>
 
-          <i class="iconfont icon-add" key="add"></i>
+          <i class="iconfont icon-close" key="close" @click="close"></i>
             
         </transition-group>
       </div>
@@ -65,6 +65,9 @@ export default {
     hideWindow() {
       ipcRenderer.invoke("hideWindow");
     },
+    close(){
+      ipcRenderer.invoke("handleClose");
+    }
   },
 };
 </script>

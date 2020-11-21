@@ -161,3 +161,9 @@ ipcMain.handle("setIgnoreMouseEvents", (event, ignore) => {
 ipcMain.handle("hideWindow", (event) => {
   win.hide();
 });
+
+ipcMain.handle("handleClose", (event) => {
+  console.log('colose win ');
+  win=null;
+  app.exit(); 
+});

@@ -1,4 +1,5 @@
 <template>
+<keep-alive>
   <div class="root" @click="add">
     <draggable
       class="list"
@@ -47,7 +48,11 @@
         </div>
       </transition-group>
     </draggable>   
+ 
+ 
+ 
   </div>
+  </keep-alive>  
 </template>
 <script>
 import draggable from "vuedraggable";
