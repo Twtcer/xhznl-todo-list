@@ -33,7 +33,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 600,
     height: 320,
-    minWidth: 600,
+    minWidth: 240,
     minHeight: 320,
     type: "toolbar",
     frame: false,
