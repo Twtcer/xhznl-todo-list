@@ -183,6 +183,10 @@ function exportData() {
     });
 }
 
+ipcMain.handle("setTimer",(event)=>{
+  console.log('setTimer success');
+});
+
 export function showNotification(option, clickCallback) {
   if (Notification.isSupported()) {
     const notification = new Notification(option);

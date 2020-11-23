@@ -24,3 +24,9 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
+dist_electron/builder-effective-config.yaml
+dist_electron/data-dev.json
+dist_electron/index.js
+dist_electron/builder-effective-config.yaml
+dist_electron/data-dev.json
+dist_electron/index.js

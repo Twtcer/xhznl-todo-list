@@ -1,6 +1,12 @@
-<template>
-<keep-alive>
-  <div class="root" @click="add">
+<template> 
+   
+  <div class="root" @click="add">   
+     <!-- <div>
+      <button type="button"
+     v-bind:class="{'start':start,'stop':!start}" class="optBtn" @click="startQuery">
+      {{this.startLabelText}}
+      </button> 
+      </div> -->
     <draggable
       class="list"
       v-model="stockList"
@@ -51,8 +57,7 @@
  
  
  
-  </div>
-  </keep-alive>  
+  </div> 
 </template>
 <script>
 import draggable from "vuedraggable";
@@ -74,8 +79,10 @@ export default {
       editIndex: -1,
       tempItem: null,
       dblclick: false,
-      setIntervalTime:10000,
-      intervalId:null
+      setIntervalTime:2000,
+      timer:0,
+      startLabelText:"开始",
+      start:false
     };
   },
   methods: {
@@ -225,6 +232,21 @@ export default {
       );
       this.stockList.splice(index, 1);
       DB.set("stockList", this.stockList);
+    },
+    startQuery(){ 
+      //默认定时刷新
+      this.timer =  setInterval(()=>{
+       this.queryStockInfos(); 
+       console.log(`fresh,${this.setIntervalTime/1000}s`);
+      },this.setIntervalTime);   
+      this.start = true;
+      this.startLabelText = "停止";
+    },
+    stopQuery(){
+      console.log('clear timer: '+this.timer);
+      clearInterval(this.timer);
+            this.start = false;
+      this.startLabelText = "开始";
     }
   },
   computed: {
@@ -241,15 +263,13 @@ export default {
     ipcRenderer.invoke("getDataPath").then((storePath) => {
       DB.initDB(storePath); 
       this.getStockList();  
-      console.log('clear intervalId: '+this.intervalId);
-      clearInterval(this.intervalId);
-      //默认定时刷新
-      this.intervalId =  setInterval(()=>{
-       this.queryStockInfos(); 
-       console.log('fresh success');
-      },this.setIntervalTime); 
-      console.log('new intervalId: '+this.intervalId);
-    });
+      if(this.timer===0) {
+        this.startQuery();
+      } 
+     });
+  },
+  destroyed() {
+    this.stopQuery();
   },
   directives: {
     focus: {
@@ -335,6 +355,17 @@ export default {
       }
     }
   }
+  .optBtn{
+     font-size: 20px;  
+  }
+  .start{
+          color:rgb(51, 241, 25);
+          background: #d5f811;
+    }
+    .stop{
+          color: #ff0000;
+          background: #d5f811;
+    }
 }
 
 .flip-list-move {

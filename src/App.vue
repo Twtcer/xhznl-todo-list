@@ -12,6 +12,7 @@
       </div>
       <div class="tools">
         <transition-group name="fade" mode="out-in">
+          <i class="iconfont icon-add" key="setTimer" @click="setTimer"></i>
           <i class="iconfont icon-export" key="export" @click="exportData"></i>
           <i class="iconfont icon-eye-close" key="hide" @click="hideWindow"></i>
 
@@ -61,6 +62,12 @@ export default {
     },
     exportData() {
       ipcRenderer.invoke("exportData");
+    },
+    setTimer() {
+      ipcRenderer.invoke("setTimer");
+    },
+    clearTimer() {
+      ipcRenderer.invoke("clearTimer");
     },
     hideWindow() {
       ipcRenderer.invoke("hideWindow");

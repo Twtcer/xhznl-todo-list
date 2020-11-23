@@ -178,8 +178,7 @@ export default {
   created() { 
     console.log('call created');
     ipcRenderer.invoke("getDataPath").then((storePath) => {
-      DB.initDB(storePath);
-
+      DB.initDB(storePath); 
       this.getTodoList();
     });
   },
